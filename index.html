@@ -1,0 +1,293 @@
+<html dir="ltr" lang="en-US">
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <!-- Stylesheets -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="src/css/grid.css" type="text/css" />
+    <link rel="stylesheet" href="src/css/style.css" type="text/css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+    <!-- External JavaScripts -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        $(function() {
+            // Zipcode API key from ZipCodeAPI.com
+            var clientKey = "js-H6siD9bLHgoI8aXRUAzFdtrEJlOHznagtDz7NKSv1hd9sb1nMB2Z4tEOPswoQGFk";
+
+            var cache = {};
+            var container = $("#form");
+            var errorDiv = container.find("div.text-error");
+
+            // Handle successful response 
+            function handleResp(data) {
+                // Check for error
+                if (data.error_msg)
+                    errorDiv.text(data.error_msg);
+                else if ("city" in data) {
+                    // Set city and state
+                    container.find("input[name='city']").val(data.city);
+                    container.find("select[name='state']").val(data.state);
+                }
+            }
+
+            // Set up event handlers
+            container.find("input[name='zipcode']").on("keyup change", function() {
+                // Get zip code
+                var zipcode = $(this).val().substring(0, 5);
+                if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode)) {
+                    // Clear error
+                    errorDiv.empty();
+
+                    // Check cache
+                    if (zipcode in cache) {
+                        handleResp(cache[zipcode]);
+                    } else {
+                        // Build url
+                        var url = "https://www.zipcodeapi.com/rest/" + clientKey + "/info.json/" + zipcode + "/radians";
+
+                        // Make AJAX request
+                        $.ajax({
+                            "url": url,
+                            "dataType": "json"
+                        }).done(function(data) {
+                            handleResp(data);
+
+                            // Store in cache
+                            cache[zipcode] = data;
+                        }).fail(function(data) {
+                            if (data.responseText && (json = $.parseJSON(data.responseText))) {
+                                // Store in cache
+                                cache[zipcode] = json;
+
+                                // Check for error
+                                if (json.error_msg)
+                                    errorDiv.text(json.error_msg);
+                            } else
+                                errorDiv.text('Request failed.');
+                        });
+                    }
+                }
+            }).trigger("change");
+        });
+        //]]>
+    </script>
+    <script type="text/javascript">
+        jQuery(function($) {
+            $("#phone").mask("(999) 999-9999", {
+                placeholder: " "
+            });
+            $("#zipcode").mask("99999?-9999", {
+                placeholder: " "
+            });
+        });
+    </script>
+
+
+
+    <title>VF Project</title>
+
+</head>
+
+<body class="full">
+
+    <section class="header">
+
+        <div class="container-fluid wrap">
+
+            <div class="row center">
+                <div class="col-half right">
+                    <img src="src/img/vodka.png" height="99px" width="141px">
+                </div>
+                <div class="col-half left">
+                    <img src="src/img/red.png" height="90px" width="123px">
+                </div>
+            </div>
+
+            <h3 class="fancy center">Enter to Win a</h3>
+
+            <h2 class="center">Odio Dignissimos Ducimus Qui Vaid</h1>
+            <div class="row">
+                <div class="col-whole center">
+                    <button class="center" action="#form">Register Today</button>
+                </div>
+            </div>
+
+            <h5 class="bold center">Sedut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolorem un laudantium, totam rem aperiam.</h5>
+
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</p>
+
+            <p class="bold">Quis autem vel eum iure reprehenderit qui in ea voluptate velit dolore.</p>
+
+        </div>
+    </section>
+
+    <section class="form" id="form">
+        <div class="container-fluid wrap" id="results">
+
+            <h3 class="fancy center">Entering Is Simple</h3>
+
+            <div class="divider"></div>
+            <p>Please complete the forms below and submit your information for a chance to win 3 tickets for a 1-year lease on a new Odio Diginissimos Ducimous Qui Vaid from Sedut Perspiciatis of at the 250 Club charity event on May 12, 2015.</p>
+            <form method='post' action='submit.php' class="contest-form">
+                <div class="row">
+                    <div class="col-half">
+                        <span class="label">First Name</span>
+                        <input type="text" name="firstname" placeholder="Your First Name" required>
+                    </div>
+                    <div class="col-half">
+                        <span class="label">Last Name</span>
+                        <input type="text" name="lastname" placeholder="Your Last Name" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-half">
+                        <span class="label">Email</span>
+                        <input type="email" name="email" placeholder="YourName@email.com" required>
+                    </div>
+                    <div class="col-half">
+                        <span class="label">Phone Number</span>
+                        <input type="tel" id="phone" name="phone" placeholder="XXX-XXX-XXXX" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-whole">
+                        <span class="label">Address 1</span>
+                        <input type="text" name="address1" placeholder="Your Address" required>
+                    </div>
+                    <div class="col-whole">
+                        <span class="label">Address 2</span>
+                        <input type="text" name="address2" placeholder="Your Second Address">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-third">
+                        <span class="label">Zip Code</span>
+                        <input type="text" name="zipcode" id="zipcode" placeholder="Your Zip Code">
+                    </div>
+                    <div class="col-third">
+                        <span class="label">City</span>
+                        <input type="text" name="city" id="city" placeholder="Your City" required>
+                    </div>
+                    <div class="col-third">
+                        <span class="label">State</span>
+                        <select name="state" id="state" required>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="DC">District Of Columbia</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-half">
+                        <input type="file" accept="image/gif, image/jpeg, image/png" name="file_upload" id="file_upload">
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="results" class="col-whole text-error">
+                    </div>
+                </div>                
+                <div class="row center">
+                    <div class="col-whole center">
+                        <input type="submit" class="center" name="send" id="post" value="Submit & Register" />
+                    </div>
+                </div>
+            </form>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#form').ajaxForm({
+                        target: '#form',
+                        success: function() {
+                            $('#results').fadeIn('slow');
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </section>
+
+    <section class="footer">
+        <div class="container-fluid wrap">
+
+            <h4 class="fancy center">Don't forget to LIKE our Facebook page to stay updated on contents details & other exciting MB special offers!</h4>
+
+            <div class="row center">
+                <div class="col-whole">
+                    <img src="src/img/facebook.png">
+                </div>
+                <div class="col-whole">
+                    <p>Must be at least 21 years of age, have fewer than 6 points on your valid Ohio drivers license, be fully insured ($250 deductible collision, $500,000 liability). Driver responsible for all maintenance over the year, $.25 per mile over 10,000. Driver responsible for all reconditioning expense and damage upon vehicle return. Driver must disclose any accidents in said vehicle to Vero Accumasas Delenti at the time of accident, repairs must be performed at Quod Maxi. ONE individual MUST be named on each raffle ticket as the winner/driver. The car cannot be won by a business, or be driven by multiple people. Courtesy of Vero eos Delenti."</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-half left">
+                    <a href="disclaimer">Disclaimer</a> | <a href="site-map">Site Map</a>
+                </div>
+                <div class="col-half right">
+                    At Vero eos accumasas delenti
+                </div>
+            </div>
+
+    </section>
+    </div>
+
+</body>
