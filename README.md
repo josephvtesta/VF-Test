@@ -16,12 +16,18 @@ Everything on the list from the document has been completed including the stretc
 I couldn’t figure out why once the image was submitted it was giving me an index error. I didn’t have too much time to look into it so I let it be and just wrote in the images for each sql entry. 
 Things I wasn’t able to complete in two hours:
 
-•	Specifying extension for file upload. 
+•	Specifying extension for file upload.
+
 •	Exporting submitted data to a CSV. (not attempted)
+
 •	Sending the two emails after form is submitted. (not attempted)
+
 •	Saving phone number in format of (555) 555-5555
+
 •	Dropdown to sort submitted data on results page. (not attempted)
+
 •	Placeholder image for users who didn’t upload anything. (not attempted)
+
 
 I did add the API integration so the Zip code fills in the State and City automatically so the “Stretch Goal” was completed. Also, I didn’t style the results page or get to work on a format I’d deem worthy for it.
 The biggest problem to me was rushing my work and checking the clock. 
@@ -32,6 +38,3 @@ The only frontend problem: the code is mobile friendly as in it works but that�
 Overall, worrying about the backend and time constraints is what lead to my demise for this project. I definitely over analyzed the documentation too but all said and done, I’d say I accomplished the goal of the project and I think it’ll give you a better representation where I’m at backend-wise more so than frontend. Given more time, I know I could complete this with higher quality. 
 
 Anyways, it was a pleasure meeting with you both; thanks again!
-
-
-
